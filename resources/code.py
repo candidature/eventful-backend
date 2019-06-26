@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse, request
 from models.code import CodeModel
-
+from models.association import AssociationModel
 
 class Code(Resource):
     parser = reqparse.RequestParser()
@@ -52,7 +52,13 @@ class Code(Resource):
     def delete(self, id):
         codeModel = CodeModel.find_by_id(id)
         if not codeModel:
-            return {'message': "CodeModel '{}' does not exists".format(id)}
+            return {'message': "CodeModel '{}' does not exists".format(id)}, 410
+
+        associated_code = AssociationModel.find_by_code_id(id)
+        if associated_code:
+            return {'message': "There is association with this runtime", 'runtimes': associated_code}, 403
+
+
         codeModel.delete()
         return {'message' : "deleted ".format(id)  }, 201
 

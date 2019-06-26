@@ -32,12 +32,8 @@ class RuntimeModel(db.Model):
 
     def json(self):
         if(self.error):
-            return {'id': self.id, 'type': self.type, 'name': self.name, 'user_name': self.user_name, 'user_password': self.user_password,
-                    'user_hostname': self.user_hostname, 'image_name' : self.image_name,
-                    'dockerfile': self.dockerfile, 'error': self.error}
-        return {'id': self.id, 'type': self.type, 'name': self.name, 'user_name': self.user_name, 'user_password': self.user_password,
-                'user_hostname': self.user_hostname, 'image_name' : self.image_name,
-                'dockerfile': self.dockerfile }
+            return {'id': self.id, 'type': self.type, 'name': self.name, 'error': self.error}
+        return {'id': self.id, 'type': self.type, 'name': self.name }
 
     @classmethod
     def find_by_name(cls, name):

@@ -30,10 +30,6 @@ def create_table():
 cors = CORS(app)
 api = Api(app)
 
-
-
-
-
 # /auth -> creates new endpoint
 # when we call /auth, we send username and password
 # jwt takes username,password and sends to authenticate
@@ -53,7 +49,7 @@ api.add_resource(RuntimeList, '/runtime/dev/v1')
 api.add_resource(Code, '/code/dev/v1/<string:id>')
 api.add_resource(CodeList, '/code/dev/v1')
 
-api.add_resource(Association, '/association/dev/v1/<string:association_name>')
+api.add_resource(Association, '/association/dev/v1/<string:id>')
 api.add_resource(AssociationList, '/association/dev/v1')
 
 

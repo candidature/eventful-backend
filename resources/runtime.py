@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse, request
 from flask_jwt import jwt_required
 from models.runtime import RuntimeModel
 
+from models.association import AssociationModel
 
 class Runtime(Resource):
     parser = reqparse.RequestParser()
@@ -59,7 +60,12 @@ class Runtime(Resource):
     def delete(self, id):
         runtimeModel = RuntimeModel.find_by_id(id)
         if not runtimeModel:
-            return {'message': "RuntimeModel id: '{}' does not exists".format(id)}
+            return {'message': "RuntimeModel id: '{}' does not exists".format(id)}, 410
+
+        associated_runtime = AssociationModel.find_by_runtime_id(id)
+        if associated_runtime:
+            return {'message': "There is association with this runtime", 'runtimes': associated_runtime}, 403
+
         runtimeModel.delete()
         return {'message' : "deleted ".format(id)  }, 201
 

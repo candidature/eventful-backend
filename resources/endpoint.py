@@ -3,6 +3,8 @@ from flask_cors import  cross_origin
 from flask_jwt import jwt_required
 from models.endpoint import EndpointModel
 
+from models.association import AssociationModel
+
 
 
 class Endpoint(Resource):
@@ -25,6 +27,7 @@ class Endpoint(Resource):
     def get(self, id):
         row = EndpointModel.find_by_id(id)
         if (row):
+            print ("A get endpoint" , row.json())
             return row.json()
 
         return {'message': 'Endpoint does not exists'}
@@ -56,8 +59,13 @@ class Endpoint(Resource):
 
     def delete(self, id):
         endpoint = EndpointModel.find_by_id(id)
+
         if not endpoint:
-            return {'message': "endpoint '{}' does not exists".format(id)}
+            return {'message': "endpoint '{}' does not exists".format(id)}, 410
+
+        associated_endpoint = AssociationModel.find_by_endpoint_id(id)
+        if associated_endpoint['associations']:
+            return {'message': "There is association with this endpoint", 'endpoints': associated_endpoint}, 403
         endpoint.delete()
         return {'message' : "deleted ".format(id)  }, 201
 
